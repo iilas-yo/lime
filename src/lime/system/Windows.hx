@@ -234,8 +234,9 @@ class Windows {
 			DwmEnableBlurBehindWindow(hwnd, &blurBehind);
 
 			if (transparent) {
-				exStyle |= WS_EX_TRANSPARENT;
+				exStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
 			} else {
+				exStyle &= ~WS_EX_LAYERED;
 				exStyle &= ~WS_EX_TRANSPARENT;
 			}
 
