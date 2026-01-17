@@ -46,9 +46,6 @@ class Window
 	 * perform more quickly on displays with a higher refresh rate
 	**/
 	public var frameRate(get, set):Float;
-	public var darkMode(default, set):Bool = false;
-	public var transparent(default, set):Bool = false;
-	public var hideWindowInTab(default, set):Bool = false;
 	public var defaultTitle(get, never):String;
 	public var alwaysOnTop(default, set):Bool = false;
 	public var fullscreen(get, set):Bool;
@@ -562,28 +559,27 @@ class Window
         Windows.removeAllWindowButtons();
     }
 
-	public function center() {
-        var centerWindowX:Int = Math.ceil((display.currentMode.width - __width) / 2);
-        var centerWindowY:Int = Math.ceil((display.currentMode.height - __height) / 2);
+	public function setTransparent(transparent:Bool, clickThrough:Bool = true){
+		stage.color = transparent ? null : 0x000000;
+		Windows.setWindowTransparent(transparent, clickThrough);
+	}
 
+	public function hideInTab(value:Bool) {
+		Windows.hideWindowInTab(value);
+	}
+
+	public function setDarkMode(value:Bool) {
+		Windows.setWindowDarkMode(value);
+	}
+
+	public function center() {
+        var centerWindowX:Int = Math.ceil((display.bounds.width - __width) / 2);
+        var centerWindowY:Int = Math.ceil((display.bounds.height - __height) / 2);
         move(centerWindowX, centerWindowY);
     }
 
-	private function set_transparent(value:Bool):Bool {
-		stage.color = value ? null : 0x000000;
-        return Windows.setWindowTransparent(value);
-    }
-
-	private function set_hideWindowInTab(value:Bool):Bool {
-		return Windows.hideWindowInTab(value);
-	}
-
 	private function get_defaultTitle():String {
         return Application.current.meta['name'];
-    }
-
-	private function set_darkMode(value:Bool):Bool {
-        return Windows.setWindowDarkColorMode(value);
     }
 
 	private function get_alwaysOnTop():Bool {

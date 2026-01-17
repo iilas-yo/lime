@@ -27,31 +27,31 @@ package lime.system;
 ')
 
 class Windows {
-	@:functionCode('
-		HWND hwnd = GetActiveWindow();
-		SetWindowPos(hwnd, (HWND)post, x, y, cx, cy, style);
-	')
-	public static function setWindowPos(post:Int, x:Int, y:Int, cx:Int, cy:Int, style:Int) {}
-
-	@:functionCode('
-		HWND hwnd = GetActiveWindow();
-		LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-
-		if (hide == true) {
-			exStyle &= WS_EX_APPWINDOW;
-			exStyle |= WS_EX_TOOLWINDOW;
-		} else {
-			exStyle |= WS_EX_APPWINDOW;
-			exStyle &= WS_EX_TOOLWINDOW;
-		}
-
-		SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
-	')
-	public static function hideWindowInTab(hide:Bool):Bool {
-		return hide;
+	public static function setWindowPos(post:Int, x:Int, y:Int, cx:Int, cy:Int, style:Int) {
+		untyped __cpp__('
+			HWND hwnd = GetActiveWindow();
+			SetWindowPos(hwnd, (HWND)post, x, y, cx, cy, style);
+		');
 	}
 
-	public static function setWindowDarkColorMode(bool:Bool):Bool {
+	public static function hideWindowInTab(hide:Bool):Void {
+		untyped __cpp__('
+			HWND hwnd = GetActiveWindow();
+			LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+
+			if (hide) {
+				exStyle &= ~WS_EX_APPWINDOW;
+				exStyle |= WS_EX_TOOLWINDOW;
+			} else {
+				exStyle |= WS_EX_APPWINDOW;
+				exStyle &= ~WS_EX_TOOLWINDOW;
+			}
+
+			SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+		');
+	}
+
+	public static function setWindowDarkMode(bool:Bool):Void {
 		var dark:Int = bool ? 1 : 0;
 		untyped __cpp__("
 			int darkMode = dark;
@@ -61,7 +61,6 @@ class Windows {
 			}
 			UpdateWindow(window);
 		");
-		return bool;
 	}
 
 	@:functionCode('
@@ -81,42 +80,41 @@ class Windows {
     ')
 	public static function setWindowBorderColor(r:Int, g:Int, b:Int) {}
 
-	@:functionCode('
-		HWND hwnd = GetActiveWindow();
-		if (hwnd) {
-			SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)nullptr);
-			SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)nullptr);
-			LONG lStyle = GetWindowLong(hwnd, GWL_STYLE);
-			lStyle &= ~WS_SYSMENU;
-			SetWindowLong(hwnd, GWL_STYLE, lStyle);
-		}
-    ')
-	public static function removeAllWindowButtons() {}
-
-	@:functionCode('
-		HWND hwnd = GetActiveWindow();
-
-		if (hwnd) {
-			LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-
-			DWM_BLURBEHIND blurBehind = {};
-			blurBehind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
-			blurBehind.hRgnBlur = CreateRectRgn(-1, -1, 0, 0);
-			blurBehind.fEnable = transparent;
-
-			DwmEnableBlurBehindWindow(hwnd, &blurBehind);
-
-			if (transparent) {
-				exStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
-			} else {
-				exStyle &= ~WS_EX_LAYERED;
-				exStyle &= ~WS_EX_TRANSPARENT;
+	public static function removeAllWindowButtons():Void {
+		untyped __cpp__("
+			HWND hwnd = GetActiveWindow();
+			if (hwnd) {
+				SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)nullptr);
+				SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)nullptr);
+				LONG lStyle = GetWindowLong(hwnd, GWL_STYLE);
+				lStyle &= ~WS_SYSMENU;
+				SetWindowLong(hwnd, GWL_STYLE, lStyle);
 			}
+		");
+	}
 
-			SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
-		}
-	')
-	public static function setWindowTransparent(transparent:Bool):Bool {
-		return transparent;
+	public static function setWindowTransparent(transparent:Bool, clickThrough:Bool = true):Void{
+		untyped __cpp__("
+			HWND hwnd = GetActiveWindow();
+
+			if (hwnd) {
+				LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+
+				DWM_BLURBEHIND blurBehind = {};
+				blurBehind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
+				blurBehind.hRgnBlur = CreateRectRgn(-1, -1, 0, 0);
+				blurBehind.fEnable = transparent;
+
+				DwmEnableBlurBehindWindow(hwnd, &blurBehind);
+
+				if (clickThrough) {
+					exStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
+				} else {
+					exStyle &= ~(WS_EX_LAYERED | WS_EX_TRANSPARENT);
+				}
+
+				SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+			}
+		");
 	}
 }
