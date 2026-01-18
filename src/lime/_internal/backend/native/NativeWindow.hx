@@ -72,7 +72,7 @@ class NativeWindow
 		if (!Reflect.hasField(contextAttributes, "depth")) contextAttributes.depth = true;
 		if (!Reflect.hasField(contextAttributes, "hardware")) contextAttributes.hardware = true;
 		if (!Reflect.hasField(contextAttributes, "stencil")) contextAttributes.stencil = true;
-		if (!Reflect.hasField(contextAttributes, "vsync")) contextAttributes.vsync = false;
+		if (!Reflect.hasField(contextAttributes, "vsync")) contextAttributes.vsync = false; 
 
 		#if (cairo || (!lime_opengl && !lime_opengles))
 		contextAttributes.type = CAIRO;
@@ -87,7 +87,6 @@ class NativeWindow
 		if (Reflect.hasField(attributes, "maximized") && attributes.maximized) flags |= cast WindowFlags.WINDOW_FLAG_MAXIMIZED;
 		if (Reflect.hasField(attributes, "minimized") && attributes.minimized) flags |= cast WindowFlags.WINDOW_FLAG_MINIMIZED;
 		if (Reflect.hasField(attributes, "resizable") && attributes.resizable) flags |= cast WindowFlags.WINDOW_FLAG_RESIZABLE;
-		if (Reflect.hasField(attributes, "vsync") && attributes.vsync) flags |= cast WindowFlags.WINDOW_FLAG_VSYNC;
 
 		if (contextAttributes.antialiasing >= 4)
 		{
