@@ -87,6 +87,7 @@ class NativeWindow
 		if (Reflect.hasField(attributes, "maximized") && attributes.maximized) flags |= cast WindowFlags.WINDOW_FLAG_MAXIMIZED;
 		if (Reflect.hasField(attributes, "minimized") && attributes.minimized) flags |= cast WindowFlags.WINDOW_FLAG_MINIMIZED;
 		if (Reflect.hasField(attributes, "resizable") && attributes.resizable) flags |= cast WindowFlags.WINDOW_FLAG_RESIZABLE;
+		if (Reflect.hasField(attributes, "vsync") && attributes.vsync) flags |= cast WindowFlags.WINDOW_FLAG_VSYNC;
 
 		if (contextAttributes.antialiasing >= 4)
 		{
@@ -508,6 +509,18 @@ class NativeWindow
 		{
 			#if (!macro && lime_cffi)
 			NativeCFFI.lime_window_set_always_on_top(handle, value);
+			#end
+		}
+
+		return value;
+	}
+
+	public function setVSync(value:Bool):Bool
+	{
+		if (handle != null)
+		{
+			#if (!macro && lime_cffi)
+			NativeCFFI.lime_window_set_vsync(handle, value);
 			#end
 		}
 

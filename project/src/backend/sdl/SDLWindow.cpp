@@ -217,13 +217,10 @@ namespace lime {
 			if (context && SDL_GL_MakeCurrent (sdlWindow, context) == 0) {
 
 				if (flags & WINDOW_FLAG_VSYNC) {
-
-					SDL_GL_SetSwapInterval (1);
-
-				} else {
-
-					SDL_GL_SetSwapInterval (0);
-
+					SetVSyncMode(true);
+				}
+				else {
+					SetVSyncMode(false);
 				}
 
 				OpenGLBindings::Init ();
@@ -786,6 +783,18 @@ namespace lime {
 
 	}
 
+	bool SDLWindow::SetVSyncMode(bool value) {
+
+		if (value) {
+			SDL_GL_SetSwapInterval(1);
+		}
+		else {
+			SDL_GL_SetSwapInterval(0);
+		}
+
+		return value;
+
+	}
 
 	void SDLWindow::SetCursor (Cursor cursor) {
 

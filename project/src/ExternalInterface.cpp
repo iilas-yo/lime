@@ -3718,6 +3718,19 @@ namespace lime {
 
 	}
 
+	bool lime_window_set_vsync (value window, bool value) {
+
+		Window* targetWindow = (Window*)val_data(window);
+		return targetWindow->SetVSyncMode(value);
+
+	}
+
+	HL_PRIM bool HL_NAME(hl_window_set_vsync (HL_CFFIPointer* window, bool value) {
+
+		Window* targetWindow = (Window*)window->ptr;
+		return targetWindow->SetVSyncMode(value);
+
+
 	void lime_window_set_cursor (value window, int cursor) {
 
 		Window* targetWindow = (Window*)val_data (window);

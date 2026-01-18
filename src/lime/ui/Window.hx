@@ -45,9 +45,9 @@ class Window
 	 * On some platforms, a frame rate of 60 or greater may imply vsync, which will
 	 * perform more quickly on displays with a higher refresh rate
 	**/
+	public var vsync(get, set):Bool;
 	public var frameRate(get, set):Float;
-	public var defaultTitle(get, never):String;
-	public var alwaysOnTop(default, set):Bool = false;
+	public var alwaysOnTop(get, set):Bool;
 	public var fullscreen(get, set):Bool;
 	public var height(get, set):Int;
 	public var hidden(get, null):Bool;
@@ -155,6 +155,7 @@ class Window
 	@:noCompletion private var __borderless:Bool;
 	@:noCompletion private var __fullscreen:Bool;
 	@:noCompletion private var __alwaysOnTop:Bool;
+	@:noCompletion private var __vsync:Bool;
 	@:noCompletion private var __height:Int;
 	@:noCompletion private var __hidden:Bool;
 	@:noCompletion private var __maximized:Bool;
@@ -177,6 +178,8 @@ class Window
 		untyped Object.defineProperties(p,
 			{
 				"borderless": {get: p.get_borderless, set: p.set_borderless},
+				"alwaysOnTop": {get: p.get_alwaysOnTop, set: p.set_alwaysOnTop},
+				"vsync": {get: p.get_vsync, set: p.set_vsync},
 				"cursor": {get: p.get_cursor, set: p.set_cursor},
 				"display": {get: p.get_display},
 				"displayMode": {get: p.get_displayMode, set: p.set_displayMode},
@@ -218,6 +221,12 @@ class Window
 		__title = Reflect.hasField(__attributes, "title") ? __attributes.title : "";
 		__hidden = false;
 		__alwaysOnTop = Reflect.hasField(__attributes, "alwaysOnTop") ? __attributes.alwaysOnTop : false;
+
+		if (attributes.context != null)
+		{
+			__vsync = Reflect.hasField(attributes.context, "vsync") ? attributes.context.vsync : false;
+		}
+
 		__borderless = Reflect.hasField(__attributes, "borderless") ? __attributes.borderless : false;
 		__resizable = Reflect.hasField(__attributes, "resizable") ? __attributes.resizable : false;
 		__maximized = Reflect.hasField(__attributes, "maximized") ? __attributes.maximized : false;
@@ -573,13 +582,9 @@ class Window
 	}
 
 	public function center() {
-        var centerWindowX:Int = Math.ceil((display.bounds.width - __width) / 2);
-        var centerWindowY:Int = Math.ceil((display.bounds.height - __height) / 2);
+        var centerWindowX:Int = Std.int((display.bounds.width - __width) / 2);
+        var centerWindowY:Int = Std.int((display.bounds.height - __height) / 2);
         move(centerWindowX, centerWindowY);
-    }
-
-	private function get_defaultTitle():String {
-        return Application.current.meta['name'];
     }
 
 	private function get_alwaysOnTop():Bool {
@@ -588,6 +593,14 @@ class Window
 
 	private function set_alwaysOnTop(value:Bool):Bool {
 		return __alwaysOnTop = __backend.setAlwaysOnTop(value);
+	}
+
+	private function get_vsync():Bool {
+		return __vsync;
+	}
+
+	private function set_vsync(value:Bool):Bool {
+		return __vsync = __backend.setVSync(value);
 	}
 
 	@:noCompletion private function get_cursor():MouseCursor
