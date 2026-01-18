@@ -3725,7 +3725,7 @@ namespace lime {
 
 	}
 
-	HL_PRIM bool HL_NAME(hl_window_set_vsync(HL_CFFIPointer* window, bool value) {
+	HL_PRIM bool HL_NAME(hl_window_set_vsync) (HL_CFFIPointer* window, bool value) {
 
 		Window* targetWindow = (Window*)window->ptr;
 		return targetWindow->SetVSyncMode(value);
