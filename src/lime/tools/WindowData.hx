@@ -13,7 +13,11 @@ abstract WindowData({
 	@:optional var display:Int;
 	@:optional var resizable:Bool;
 	@:optional var borderless:Bool;
+	@:optional var removeButtons:Bool;
 	@:optional var vsync:Bool;
+	@:optional var darkMode:Bool;
+	@:optional var transparent:Bool;
+	@:optional var hideInTab:Bool;
 	@:optional var fullscreen:Bool;
 	@:optional var allowHighDPI:Bool;
 	@:optional var alwaysOnTop:Bool;
@@ -41,11 +45,15 @@ abstract WindowData({
 		y: 0.0,
 		background: 0,
 		parameters: "",
+		darkMode: false,
 		fps: 0,
 		hardware: false,
 		display: 0,
 		resizable: false,
 		borderless: false,
+		transparent: false,
+		hideInTab: false,
+		removeButtons: true,
 		vsync: false,
 		fullscreen: false,
 		allowHighDPI: false,

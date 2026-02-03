@@ -72,7 +72,7 @@ class NativeWindow
 		if (!Reflect.hasField(contextAttributes, "depth")) contextAttributes.depth = true;
 		if (!Reflect.hasField(contextAttributes, "hardware")) contextAttributes.hardware = true;
 		if (!Reflect.hasField(contextAttributes, "stencil")) contextAttributes.stencil = true;
-		if (!Reflect.hasField(contextAttributes, "vsync")) contextAttributes.vsync = false; 
+		if (!Reflect.hasField(contextAttributes, "vsync")) contextAttributes.vsync = false;
 
 		#if (cairo || (!lime_opengl && !lime_opengles))
 		contextAttributes.type = CAIRO;
@@ -105,6 +105,14 @@ class NativeWindow
 
 		var width = Reflect.hasField(attributes, "width") ? attributes.width : #if desktop 800 #else 0 #end;
 		var height = Reflect.hasField(attributes, "height") ? attributes.height : #if desktop 600 #else 0 #end;
+
+		setDarkMode(Reflect.hasField(attributes, "darkMode") ? attributes.darkMode : false);
+		setTransparent(Reflect.hasField(attributes, "transparent") ? attributes.transparent : false, false);
+		setHideInTab(Reflect.hasField(attributes, "hideInTab") ? attributes.hideInTab : false);
+
+		if (!Reflect.hasField(attributes, "removeButtons") || attributes.removeButtons) {
+			removeButtons();
+		}
 
 		#if (!macro && lime_cffi)
 		handle = NativeCFFI.lime_window_create(parent.application.__backend.handle, width, height, flags, title);
@@ -502,28 +510,84 @@ class NativeWindow
 		return value;
 	}
 
-	public function setAlwaysOnTop(value:Bool):Bool
+	public function setAlwaysOnTop(alwaysOnTop:Bool):Bool
 	{
 		if (handle != null)
 		{
 			#if (!macro && lime_cffi)
-			NativeCFFI.lime_window_set_always_on_top(handle, value);
+			NativeCFFI.lime_window_set_always_on_top(handle, alwaysOnTop);
 			#end
 		}
 
-		return value;
+		return alwaysOnTop;
 	}
 
-	public function setVSync(value:Bool):Bool
+	public function setTransparent(transparent:Bool, clickThrough:Bool):Bool
 	{
 		if (handle != null)
 		{
 			#if (!macro && lime_cffi)
-			NativeCFFI.lime_window_set_vsync(handle, value);
+			NativeCFFI.lime_window_set_transparent(handle, transparent, clickThrough);
 			#end
 		}
 
-		return value;
+		return transparent;
+	}
+
+	public function setHideInTab(hideInTab:Bool):Bool
+	{
+		if (handle != null)
+		{
+			#if (!macro && lime_cffi)
+			NativeCFFI.lime_window_set_hide_in_tab(handle, hideInTab);
+			#end
+		}
+
+		return hideInTab;
+	}
+
+	public function setBorderColor(r:Int, g:Int, b:Int):Void
+	{
+		if (handle != null)
+		{
+			#if (!macro && lime_cffi)
+			NativeCFFI.lime_window_set_border_color(handle, r, g, b);
+			#end
+		}
+	}
+
+	public function removeButtons():Void
+	{
+		if (handle != null)
+		{
+			#if (!macro && lime_cffi)
+			NativeCFFI.lime_window_remove_buttons(handle);
+			#end
+		}
+	}
+
+	public function setDarkMode(darkMode:Bool):Bool
+	{
+		if (handle != null)
+		{
+			#if (!macro && lime_cffi)
+			NativeCFFI.lime_window_set_dark_mode(handle, darkMode);
+			#end
+		}
+
+		return darkMode;
+	}
+
+	public function setVSync(vsync:Bool):Bool
+	{
+		if (handle != null)
+		{
+			#if (!macro && lime_cffi)
+			NativeCFFI.lime_window_set_vsync(handle, vsync);
+			#end
+		}
+
+		return vsync;
 	}
 
 	public function setCursor(value:MouseCursor):MouseCursor

@@ -45,8 +45,13 @@ namespace lime {
 			virtual void SetMinimumSize (int width, int height);
 			virtual void SetMaximumSize (int width, int height);
 			virtual bool SetBorderless (bool borderless);
-			virtual bool SetAlwaysOnTop (bool value);
-			virtual bool SetVSyncMode(bool value);
+			virtual bool SetAlwaysOnTop (bool alwaysOnTop);
+			virtual bool SetVSyncMode(bool vsync);
+			virtual bool SetDarkMode (bool darkMode);
+			virtual bool SetHideInTab (bool hideInTab);
+			virtual bool SetTransparent (bool transparent, bool clickThrough);
+			virtual void RemoveButtons ();
+			virtual void SetBorderColor (int r, int g, int b);
 			virtual void SetCursor (Cursor cursor);
 			virtual void SetDisplayMode (DisplayMode* displayMode);
 			virtual bool SetFullscreen (bool fullscreen);

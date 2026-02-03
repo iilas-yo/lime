@@ -7,6 +7,11 @@ typedef WindowAttributes =
 	@:optional public var allowHighDPI:Bool;
 	@:optional public var alwaysOnTop:Bool;
 	@:optional public var borderless:Bool;
+	@:optional public var darkMode:Bool;
+	@:optional public var hideInTab:Bool;
+	@:optional public var removeButtons:Bool;
+	@:optional public var transparent:Bool;
+	@:optional public var hardware:Bool;
 	@:optional public var context:RenderContextAttributes;
 	@:optional public var display:Int;
 	@:optional public var element:#if (js && html5 && !doc_gen) js.html.Element #else Dynamic #end;

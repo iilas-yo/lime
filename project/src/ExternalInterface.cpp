@@ -3672,6 +3672,7 @@ namespace lime {
 
 	}
 
+	// maximum size
 
 	void lime_window_set_maximum_size (value window, int width, int height) {
 
@@ -3688,6 +3689,7 @@ namespace lime {
 
 	}
 
+	// borderless
 
 	bool lime_window_set_borderless (value window, bool borderless) {
 
@@ -3704,33 +3706,97 @@ namespace lime {
 
 	}
 
-	bool lime_window_set_always_on_top (value window, bool value) {
+	// alwaysOnTop
+
+	bool lime_window_set_always_on_top (value window, bool alwaysOnTop) {
 
 		Window* targetWindow = (Window*)val_data (window);
-		return targetWindow->SetAlwaysOnTop (value);
+		return targetWindow->SetAlwaysOnTop (alwaysOnTop);
 
 	}
 
-	HL_PRIM bool HL_NAME(hl_window_set_always_on_top) (HL_CFFIPointer* window, bool value) {
+	HL_PRIM bool HL_NAME(hl_window_set_always_on_top) (HL_CFFIPointer* window, bool alwaysOnTop) {
 
 		Window* targetWindow = (Window*)window->ptr;
-		return targetWindow->SetAlwaysOnTop (value);
+		return targetWindow->SetAlwaysOnTop (alwaysOnTop);
 
 	}
 
-	bool lime_window_set_vsync(value window, bool value) {
+	// vsync
+
+	bool lime_window_set_vsync(value window, bool vsync) {
 
 		Window* targetWindow = (Window*)val_data(window);
-		return targetWindow->SetVSyncMode(value);
+		return targetWindow->SetVSyncMode(vsync);
 
 	}
 
-	HL_PRIM bool HL_NAME(hl_window_set_vsync) (HL_CFFIPointer* window, bool value) {
+	HL_PRIM bool HL_NAME(hl_window_set_vsync) (HL_CFFIPointer* window, bool vsync) {
 
 		Window* targetWindow = (Window*)window->ptr;
-		return targetWindow->SetVSyncMode(value);
+		return targetWindow->SetVSyncMode(vsync);
 
 	}
+
+	// transparent
+
+	bool lime_window_set_transparent(value window, bool transparent, bool clickThrough) {
+		Window* targetWindow = (Window*)val_data(window);
+		return targetWindow->SetTransparent(transparent, clickThrough);
+	}
+
+	HL_PRIM bool HL_NAME(hl_window_set_transparent) (HL_CFFIPointer* window, bool transparent, bool clickThrough) {
+		Window* targetWindow = (Window*)window->ptr;
+		return targetWindow->SetTransparent(transparent, clickThrough);
+	}
+
+	// hide in tab
+	bool lime_window_set_hide_in_tab(value window, bool hideInTab) {
+		Window* targetWindow = (Window*)val_data(window);
+		return targetWindow->SetHideInTab(hideInTab);
+	}
+
+	HL_PRIM bool HL_NAME(hl_window_set_hide_in_tab) (HL_CFFIPointer* window, bool hideInTab) {
+		Window* targetWindow = (Window*)window->ptr;
+		return targetWindow->SetHideInTab(hideInTab);
+	}
+
+	// darkMode
+
+	bool lime_window_set_dark_mode(value window, bool darkMode) {
+		Window* targetWindow = (Window*)val_data(window);
+		return targetWindow->SetDarkMode(darkMode);
+	}
+
+	HL_PRIM bool HL_NAME(hl_window_set_dark_mode) (HL_CFFIPointer* window, bool darkMode) {
+		Window* targetWindow = (Window*)window->ptr;
+		return targetWindow->SetDarkMode(darkMode);
+	}
+
+	// border color
+	void lime_window_set_border_color (value window, int r, int g, int b) {
+		Window* targetWindow = (Window*)val_data (window);
+		targetWindow->SetBorderColor (r, g, b);
+	}
+
+	HL_PRIM void HL_NAME(hl_window_set_border_color) (HL_CFFIPointer* window, int r, int g, int b) {
+		Window* targetWindow = (Window*)window->ptr;
+		targetWindow->SetBorderColor (r, g, b);
+	}
+
+	// remove buttons
+
+	void lime_window_remove_buttons (value window) {
+		Window* targetWindow = (Window*)val_data (window);
+		targetWindow->RemoveButtons ();
+	}
+
+	HL_PRIM void HL_NAME(hl_window_remove_buttons) (HL_CFFIPointer* window) {
+		Window* targetWindow = (Window*)window->ptr;
+		targetWindow->RemoveButtons ();
+	}
+
+	// cursor
 
 	void lime_window_set_cursor (value window, int cursor) {
 
@@ -4194,6 +4260,11 @@ namespace lime {
 	DEFINE_PRIME2 (lime_window_set_borderless);
 	DEFINE_PRIME2 (lime_window_set_always_on_top);
 	DEFINE_PRIME2(lime_window_set_vsync);
+	DEFINE_PRIME2(lime_window_set_dark_mode);
+	DEFINE_PRIME3v(lime_window_set_transparent);
+	DEFINE_PRIME2(lime_window_set_hide_in_tab);
+	DEFINE_PRIME4v(lime_window_set_border_color);
+	DEFINE_PRIME1v(lime_window_remove_buttons);
 	DEFINE_PRIME2v (lime_window_set_cursor);
 	DEFINE_PRIME2 (lime_window_set_display_mode);
 	DEFINE_PRIME2 (lime_window_set_fullscreen);
@@ -4390,6 +4461,11 @@ namespace lime {
 	DEFINE_HL_PRIM (_BOOL, hl_window_set_borderless, _TCFFIPOINTER _BOOL);
 	DEFINE_HL_PRIM (_BOOL, hl_window_set_always_on_top, _TCFFIPOINTER _BOOL);
 	DEFINE_HL_PRIM(_BOOL, hl_window_set_vsync, _TCFFIPOINTER _BOOL);
+	DEFINE_HL_PRIM(_BOOL, hl_window_set_dark_mode, _TCFFIPOINTER _BOOL);
+	DEFINE_HL_PRIM(_BOOL, hl_window_set_transparent, _TCFFIPOINTER _BOOL _BOOL);
+	DEFINE_HL_PRIM(_BOOL, hl_window_set_hide_in_tab, _TCFFIPOINTER _BOOL);
+	DEFINE_HL_PRIM(_VOID, hl_window_remove_buttons, _TCFFIPOINTER);
+	DEFINE_HL_PRIM(_VOID, hl_window_set_border_color, _TCFFIPOINTER _I32 _I32 _I32);
 	DEFINE_HL_PRIM (_VOID, hl_window_set_cursor, _TCFFIPOINTER _I32);
 	DEFINE_HL_PRIM (_VOID, hl_window_set_display_mode, _TCFFIPOINTER _TDISPLAYMODE _TDISPLAYMODE);
 	DEFINE_HL_PRIM (_BOOL, hl_window_set_fullscreen, _TCFFIPOINTER _BOOL);

@@ -48,6 +48,9 @@ class Window
 	public var vsync(get, set):Bool;
 	public var frameRate(get, set):Float;
 	public var alwaysOnTop(get, set):Bool;
+	public var darkMode(get, set):Bool;
+	public var transparent(get, set):Bool;
+	public var hideInTab(get, set):Bool;
 	public var fullscreen(get, set):Bool;
 	public var height(get, set):Int;
 	public var hidden(get, null):Bool;
@@ -155,6 +158,9 @@ class Window
 	@:noCompletion private var __borderless:Bool;
 	@:noCompletion private var __fullscreen:Bool;
 	@:noCompletion private var __alwaysOnTop:Bool;
+	@:noCompletion private var __darkMode:Bool;
+	@:noCompletion private var __transparent:Bool;
+	@:noCompletion private var __hideInTab:Bool;
 	@:noCompletion private var __vsync:Bool;
 	@:noCompletion private var __height:Int;
 	@:noCompletion private var __hidden:Bool;
@@ -179,6 +185,9 @@ class Window
 			{
 				"borderless": {get: p.get_borderless, set: p.set_borderless},
 				"alwaysOnTop": {get: p.get_alwaysOnTop, set: p.set_alwaysOnTop},
+				"darkMode": {get: p.get_darkMode, set: p.set_darkMode},
+				"transparent": {get: p.get_transparent, set: p.set_transparent},
+				"hideInTab": {get: p.get_hideInTab, set: p.set_hideInTab},
 				"vsync": {get: p.get_vsync, set: p.set_vsync},
 				"cursor": {get: p.get_cursor, set: p.set_cursor},
 				"display": {get: p.get_display},
@@ -221,6 +230,9 @@ class Window
 		__title = Reflect.hasField(__attributes, "title") ? __attributes.title : "";
 		__hidden = false;
 		__alwaysOnTop = Reflect.hasField(__attributes, "alwaysOnTop") ? __attributes.alwaysOnTop : false;
+		__darkMode = Reflect.hasField(__attributes, "darkMode") ? __attributes.darkMode : false;
+		__transparent = Reflect.hasField(__attributes, "transparent") ? __attributes.transparent : false;
+		__hideInTab = Reflect.hasField(__attributes, "hideInTab") ? __attributes.hideInTab : false;
 
 		if (attributes.context != null)
 		{
@@ -536,8 +548,6 @@ class Window
 		__backend.warpMouse(x, y);
 	}
 
-	// Get & Set Methods
-
 	/**
      * Changes the size, position, and Z order of a child, pop-up, or top-level window.
      * These windows are ordered according to their appearance on the screen.
@@ -561,25 +571,12 @@ class Window
      * @param b The intensity of the blue color.
      */
     public function setBorderColor(r:Int, g:Int, b:Int) {
-        Windows.setWindowBorderColor(r, g, b);
+        __backend.setBorderColor(r, g, b);
     }
 
-	public function removeAllButtons() {
-        Windows.removeAllWindowButtons();
+	public function removeButtons() {
+        __backend.removeButtons();
     }
-
-	public function setTransparent(transparent:Bool, clickThrough:Bool = true){
-		stage.color = transparent ? null : 0x000000;
-		Windows.setWindowTransparent(transparent, clickThrough);
-	}
-
-	public function hideInTab(value:Bool) {
-		Windows.hideWindowInTab(value);
-	}
-
-	public function setDarkMode(value:Bool) {
-		Windows.setWindowDarkMode(value);
-	}
 
 	public function center() {
         var centerWindowX:Int = Std.int((display.bounds.width - __width) / 2);
@@ -587,12 +584,14 @@ class Window
         move(centerWindowX, centerWindowY);
     }
 
-	private function get_alwaysOnTop():Bool {
-		return __alwaysOnTop;
-	}
+	// Get & Set Methods
 
 	private function set_alwaysOnTop(value:Bool):Bool {
 		return __alwaysOnTop = __backend.setAlwaysOnTop(value);
+	}
+
+	private function get_alwaysOnTop():Bool {
+		return __alwaysOnTop;
 	}
 
 	private function get_vsync():Bool {
@@ -601,6 +600,31 @@ class Window
 
 	private function set_vsync(value:Bool):Bool {
 		return __vsync = __backend.setVSync(value);
+	}
+
+	private function set_darkMode(value:Bool):Bool {
+		return __darkMode = __backend.setDarkMode(value);
+	}
+
+	private function get_darkMode():Bool {
+		return __darkMode;
+	}
+
+	private function set_transparent(transparent:Bool):Bool {
+		stage.color = transparent ? null : 0x000000;
+		return __transparent = __backend.setTransparent(transparent, true);
+	}
+
+	@:noCompletion private function get_transparent():Bool {
+		return __transparent;
+	}
+
+	@:noCompletion private function set_hideInTab(value:Bool):Bool {
+		return __hideInTab = __backend.setHideInTab(value);
+	}
+
+	@:noCompletion private function get_hideInTab():Bool {
+		return __hideInTab;
 	}
 
 	@:noCompletion private function get_cursor():MouseCursor

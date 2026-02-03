@@ -341,6 +341,16 @@ class NativeCFFI
 
 	@:cffi private static function lime_window_set_vsync(handle:Dynamic, value:Bool):Bool;
 
+	@:cffi private static function lime_window_set_dark_mode(handle:Dynamic, darkMode:Bool):Bool;
+
+	@:cffi private static function lime_window_set_transparent(handle:Dynamic, transparent:Bool, clickThrough:Bool):Bool;
+
+	@:cffi private static function lime_window_set_hide_in_tab(handle:Dynamic, hideInTab:Bool):Bool;
+
+	@:cffi private static function lime_window_set_border_color(handle:Dynamic, r:Int, g:Int, b:Int):Void;
+
+	@:cffi private static function lime_window_remove_buttons(handle:Dynamic):Void;
+
 	@:cffi private static function lime_window_set_cursor(handle:Dynamic, cursor:Int):Void;
 
 	@:cffi private static function lime_window_set_display_mode(handle:Dynamic, displayMode:Dynamic):Dynamic;
@@ -615,6 +625,15 @@ class NativeCFFI
 		false));
 	private static var lime_window_set_vsync = new cpp.Callable<cpp.Object->Bool->Bool>(cpp.Prime._loadPrime("lime", "lime_window_set_vsync", "obb",
 		false));
+	private static var lime_window_set_dark_mode = new cpp.Callable<cpp.Object->Bool->Bool>(cpp.Prime._loadPrime("lime", "lime_window_set_dark_mode", "obb",
+		false));
+	private static var lime_window_set_transparent = new cpp.Callable<cpp.Object->Bool->Bool->Bool>(cpp.Prime._loadPrime("lime", "lime_window_set_transparent", "obbb",
+		false));
+	private static var lime_window_set_hide_in_tab = new cpp.Callable<cpp.Object->Bool->Bool>(cpp.Prime._loadPrime("lime", "lime_window_set_hide_in_tab", "obb",
+		false));
+	private static var lime_window_set_border_color = new cpp.Callable<cpp.Object->Int->Int->Int->cpp.Void>(cpp.Prime._loadPrime("lime", "lime_window_set_border_color", "oiiiv",
+		false));
+	private static var lime_window_remove_buttons = new cpp.Callable<cpp.Object->cpp.Void>(cpp.Prime._loadPrime("lime", "lime_window_remove_buttons", "ov", false));
 	private static var lime_window_set_cursor = new cpp.Callable<cpp.Object->Int->cpp.Void>(cpp.Prime._loadPrime("lime", "lime_window_set_cursor", "oiv",
 		false));
 	private static var lime_window_set_display_mode = new cpp.Callable<cpp.Object->cpp.Object->cpp.Object>(cpp.Prime._loadPrime("lime",
@@ -793,6 +812,11 @@ class NativeCFFI
 	private static var lime_window_set_borderless = CFFI.load("lime", "lime_window_set_borderless", 2);
 	private static var lime_window_set_always_on_top = CFFI.load("lime", "lime_window_set_always_on_top", 2);
 	private static var lime_window_set_vsync = CFFI.load("lime", "lime_window_set_vsync", 2);
+	private static var lime_window_set_transparent = CFFI.load("lime", "lime_window_set_transparent", 3);
+	private static var lime_window_set_hide_in_tab = CFFI.load("lime", "lime_window_set_hide_in_tab", 2);
+	private static var lime_window_set_border_color = CFFI.load("lime", "lime_window_set_border_color", 4);
+	private static var lime_window_remove_buttons = CFFI.load("lime", "lime_window_remove_buttons", 1);
+	private static var lime_window_set_dark_mode = CFFI.load("lime", "lime_window_set_dark_mode", 2);
 	private static var lime_window_set_cursor = CFFI.load("lime", "lime_window_set_cursor", 2);
 	private static var lime_window_set_display_mode = CFFI.load("lime", "lime_window_set_display_mode", 2);
 	private static var lime_window_set_fullscreen = CFFI.load("lime", "lime_window_set_fullscreen", 2);
@@ -1394,6 +1418,25 @@ class NativeCFFI
 	}
 
 	@:hlNative("lime", "hl_window_set_vsync") private static function lime_window_set_vsync(handle:CFFIPointer, value:Bool):Bool
+	{
+		return false;
+	}
+
+	@:hlNative("lime", "hl_window_set_transparent") private static function lime_window_set_transparent(handle:CFFIPointer, transparent:Bool, clickThrough:Bool):Bool
+	{
+		return false;
+	}
+
+	@:hlNative("lime", "hl_window_set_hide_in_tab") private static function lime_window_set_hide_in_tab(handle:CFFIPointer, hideInTab:Bool):Bool
+	{
+		return false;
+	}
+
+	@:hlNative("lime", "hl_window_set_border_color") private static function lime_window_set_border_color(handle:CFFIPointer, r:Int, g:Int, b:Int):Void {}
+
+	@:hlNative("lime", "hl_window_set_remove_buttons") private static function lime_window_remove_buttons(handle:CFFIPointer):Void {}
+
+	@:hlNative("lime", "hl_window_set_dark_mode") private static function lime_window_set_dark_mode(handle:CFFIPointer, darkMode:Bool):Bool
 	{
 		return false;
 	}

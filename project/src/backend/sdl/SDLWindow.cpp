@@ -7,6 +7,11 @@
 #ifdef HX_WINDOWS
 #include <SDL_syswm.h>
 #include <Windows.h>
+#include <dwmapi.h>
+#include <wingdi.h>
+
+#pragma comment(lib, "dwmapi")
+#pragma comment(lib, "Gdi32.lib")
 #undef CreateWindow
 #endif
 
@@ -756,44 +761,19 @@ namespace lime {
 
 
 	bool SDLWindow::SetBorderless (bool borderless) {
-
-		if (borderless) {
-
-			SDL_SetWindowBordered (sdlWindow, SDL_FALSE);
-
-		} else {
-
-			SDL_SetWindowBordered (sdlWindow, SDL_TRUE);
-
-		}
-
+		SDL_SetWindowBordered (sdlWindow, borderless ? SDL_FALSE : SDL_TRUE);
 		return borderless;
 
 	}
 
-	bool SDLWindow::SetAlwaysOnTop(bool value) {
-
-		if (value) {
-			SDL_SetWindowAlwaysOnTop(sdlWindow, SDL_TRUE);
-		} else {
-			SDL_SetWindowAlwaysOnTop(sdlWindow, SDL_FALSE);
-		}
-
-		return value;
-
+	bool SDLWindow::SetAlwaysOnTop(bool alwaysOnTop) {
+		SDL_SetWindowAlwaysOnTop(sdlWindow, alwaysOnTop ? SDL_TRUE : SDL_FALSE);
+		return alwaysOnTop;
 	}
 
-	bool SDLWindow::SetVSyncMode(bool value) {
-
-		if (value) {
-			SDL_GL_SetSwapInterval(1);
-		}
-		else {
-			SDL_GL_SetSwapInterval(0);
-		}
-
-		return value;
-
+	bool SDLWindow::SetVSyncMode(bool vsync) {
+		SDL_GL_SetSwapInterval(vsync ? 1 : 0);
+		return vsync;
 	}
 
 	void SDLWindow::SetCursor (Cursor cursor) {
@@ -1005,6 +985,113 @@ namespace lime {
 
 	}
 
+	void SDLWindow::SetBorderColor(int r, int g, int b) {
+		SDL_SysWMinfo wminfo;
+		SDL_VERSION (&wminfo.version);
+
+		if (SDL_GetWindowWMInfo (sdlWindow, &wminfo) == 1) {
+			HWND hwnd = wminfo.info.win.window;
+			auto color = RGB(r, g, b);
+
+			if (S_OK != DwmSetWindowAttribute(hwnd, 35, &color, sizeof(COLORREF))) {
+				DwmSetWindowAttribute(hwnd, 35, &color, sizeof(COLORREF));
+			}
+
+			if (S_OK != DwmSetWindowAttribute(hwnd, 34, &color, sizeof(COLORREF))) {
+				DwmSetWindowAttribute(hwnd, 34, &color, sizeof(COLORREF));
+			}
+
+			UpdateWindow(hwnd);
+		}
+	}
+
+	void SDLWindow::RemoveButtons() {
+		SDL_SysWMinfo wminfo;
+		SDL_VERSION (&wminfo.version);
+
+		if (SDL_GetWindowWMInfo (sdlWindow, &wminfo) == 1) {
+			HWND hwnd = wminfo.info.win.window;
+
+			SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)nullptr);
+			SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)nullptr);
+			LONG lStyle = GetWindowLong(hwnd, GWL_STYLE);
+			lStyle &= ~WS_SYSMENU;
+			SetWindowLong(hwnd, GWL_STYLE, lStyle);
+		}
+	}
+
+	bool SDLWindow::SetTransparent(bool transparent, bool clickThrough) {
+		SDL_SysWMinfo wminfo;
+		SDL_VERSION (&wminfo.version);
+
+		if (SDL_GetWindowWMInfo (sdlWindow, &wminfo) == 1) {
+			HWND hwnd = wminfo.info.win.window;
+			LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+
+			DWM_BLURBEHIND blurBehind = {};
+			blurBehind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
+			blurBehind.hRgnBlur = CreateRectRgn(-1, -1, 0, 0);
+			blurBehind.fEnable = transparent;
+
+			DwmEnableBlurBehindWindow(hwnd, &blurBehind);
+
+			if (clickThrough) {
+				exStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
+			} else {
+				exStyle &= ~(WS_EX_LAYERED | WS_EX_TRANSPARENT);
+			}
+
+			SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+		}
+
+		return transparent;
+	}
+
+	bool SDLWindow::SetHideInTab(bool hideInTab) {
+		SDL_SysWMinfo wminfo;
+		SDL_VERSION (&wminfo.version);
+
+		if (SDL_GetWindowWMInfo (sdlWindow, &wminfo) == 1) {
+
+			HWND hwnd = wminfo.info.win.window;
+			LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+
+			if (hideInTab) {
+				exStyle &= ~WS_EX_APPWINDOW;
+				exStyle |= WS_EX_TOOLWINDOW;
+			} else {
+				exStyle |= WS_EX_APPWINDOW;
+				exStyle &= ~WS_EX_TOOLWINDOW;
+			}
+
+			SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+		}
+
+		return hideInTab;
+	}
+
+	bool SDLWindow::SetDarkMode (bool darkMode) {
+		SDL_SetWindowBordered (sdlWindow, SDL_FALSE);
+		SDL_SetWindowBordered (sdlWindow, SDL_TRUE);
+
+		SDL_SysWMinfo wminfo;
+		SDL_VERSION (&wminfo.version);
+
+		int dark = darkMode ? 1 : 0;
+
+		if (SDL_GetWindowWMInfo (sdlWindow, &wminfo) == 1) {
+
+			HWND hwnd = wminfo.info.win.window;
+
+			if (S_OK != DwmSetWindowAttribute(hwnd, 19, &dark, sizeof(dark))) {
+				DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark, sizeof(dark));
+			}
+			UpdateWindow(hwnd);
+		}
+
+		return darkMode;
+
+	}
 
 	void SDLWindow::SetIcon (ImageBuffer *imageBuffer) {
 
@@ -1018,7 +1105,6 @@ namespace lime {
 		}
 
 	}
-
 
 	bool SDLWindow::SetMaximized (bool maximized) {
 
