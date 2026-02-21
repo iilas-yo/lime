@@ -9,6 +9,7 @@ abstract WindowData({
 	@:optional var background:Null<Int>;
 	@:optional var parameters:String;
 	@:optional var fps:Int;
+	@:optional var opacity:Float;
 	@:optional var hardware:Bool;
 	@:optional var display:Int;
 	@:optional var resizable:Bool;
@@ -58,6 +59,7 @@ abstract WindowData({
 		fullscreen: false,
 		allowHighDPI: false,
 		alwaysOnTop: false,
+		opacity: 1.0,
 		antialiasing: 0,
 		orientation: Orientation.AUTO,
 		allowShaders: false,

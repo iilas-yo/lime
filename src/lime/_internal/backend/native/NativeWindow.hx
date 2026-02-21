@@ -106,14 +106,6 @@ class NativeWindow
 		var width = Reflect.hasField(attributes, "width") ? attributes.width : #if desktop 800 #else 0 #end;
 		var height = Reflect.hasField(attributes, "height") ? attributes.height : #if desktop 600 #else 0 #end;
 
-		setDarkMode(Reflect.hasField(attributes, "darkMode") ? attributes.darkMode : false);
-		setTransparent(Reflect.hasField(attributes, "transparent") ? attributes.transparent : false, false);
-		setHideInTab(Reflect.hasField(attributes, "hideInTab") ? attributes.hideInTab : false);
-
-		if (!Reflect.hasField(attributes, "removeButtons") || attributes.removeButtons) {
-			removeButtons();
-		}
-
 		#if (!macro && lime_cffi)
 		handle = NativeCFFI.lime_window_create(parent.application.__backend.handle, width, height, flags, title);
 
@@ -190,6 +182,15 @@ class NativeWindow
 		// See, for example: openfl/openfl#2697
 		// it appears that SDL 3 may behave differently, if we ever upgrade.
 		setTextInputEnabled(false);
+
+		setDarkMode(Reflect.hasField(attributes, "darkMode") ? attributes.darkMode : false);
+		setTransparent(Reflect.hasField(attributes, "transparent") ? attributes.transparent : false, false);
+		setHideInTab(Reflect.hasField(attributes, "hideInTab") ? attributes.hideInTab : false);
+		setOpacity(Reflect.hasField(attributes, "opacity") ? attributes.opacity : 1.0);
+
+		if (Reflect.hasField(attributes, "removeButtons") || attributes.removeButtons) {
+			removeButtons();
+		}
 	}
 
 	public function alert(message:String, title:String):Void

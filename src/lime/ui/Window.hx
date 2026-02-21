@@ -172,6 +172,7 @@ class Window
 	@:noCompletion private var __width:Int;
 	@:noCompletion private var __x:Int;
 	@:noCompletion private var __y:Int;
+	@:noCompletion private var __opacity:Float;
 	@:noCompletion private var __minWidth:Int = 0;
 	@:noCompletion private var __minHeight:Int = 0;
 	@:noCompletion private var __maxWidth:Int = 0x7FFFFFFF;
@@ -185,6 +186,7 @@ class Window
 			{
 				"borderless": {get: p.get_borderless, set: p.set_borderless},
 				"alwaysOnTop": {get: p.get_alwaysOnTop, set: p.set_alwaysOnTop},
+				"opacity": {get: p.get_opacity, set: p.set_opacity},
 				"darkMode": {get: p.get_darkMode, set: p.set_darkMode},
 				"transparent": {get: p.get_transparent, set: p.set_transparent},
 				"hideInTab": {get: p.get_hideInTab, set: p.set_hideInTab},
@@ -227,6 +229,7 @@ class Window
 		__scale = 1;
 		__x = 0;
 		__y = 0;
+		__opacity = Reflect.hasField(__attributes, "opacity") ? __attributes.opacity : 1.0;
 		__title = Reflect.hasField(__attributes, "title") ? __attributes.title : "";
 		__hidden = false;
 		__alwaysOnTop = Reflect.hasField(__attributes, "alwaysOnTop") ? __attributes.alwaysOnTop : false;
@@ -777,13 +780,13 @@ class Window
 
 	@:noCompletion private function get_opacity():Float
 	{
-		return __backend.getOpacity();
+		return __opacity = __backend.getOpacity();
 	}
 
 	@:noCompletion private function set_opacity(value:Float):Float
 	{
 		__backend.setOpacity(value);
-		return value;
+		return __opacity = value;
 	}
 
 	@:noCompletion private inline function get_resizable():Bool

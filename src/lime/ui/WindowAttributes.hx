@@ -12,6 +12,7 @@ typedef WindowAttributes =
 	@:optional public var removeButtons:Bool;
 	@:optional public var transparent:Bool;
 	@:optional public var hardware:Bool;
+	@:optional public var opacity:Float;
 	@:optional public var context:RenderContextAttributes;
 	@:optional public var display:Int;
 	@:optional public var element:#if (js && html5 && !doc_gen) js.html.Element #else Dynamic #end;

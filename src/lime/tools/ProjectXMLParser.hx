@@ -1960,6 +1960,9 @@ class ProjectXMLParser extends HXProject
 				case "parameters", "title":
 					Reflect.setField(windows[id], name, Std.string(value));
 
+				case "opacity":
+					Reflect.setField(windows[id], name, Std.parseFloat(value));
+
 				case "allow-high-dpi":
 					Reflect.setField(windows[id], "allowHighDPI", value == "true");
 
