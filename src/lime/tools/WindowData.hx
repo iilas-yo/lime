@@ -17,7 +17,6 @@ abstract WindowData({
 	@:optional var removeButtons:Bool;
 	@:optional var vsync:Bool;
 	@:optional var darkMode:Bool;
-	@:optional var transparent:Bool;
 	@:optional var hideInTab:Bool;
 	@:optional var fullscreen:Bool;
 	@:optional var allowHighDPI:Bool;
@@ -52,7 +51,6 @@ abstract WindowData({
 		display: 0,
 		resizable: false,
 		borderless: false,
-		transparent: false,
 		hideInTab: false,
 		removeButtons: true,
 		vsync: false,

@@ -49,7 +49,6 @@ class Window
 	public var frameRate(get, set):Float;
 	public var alwaysOnTop(get, set):Bool;
 	public var darkMode(get, set):Bool;
-	public var transparent(get, set):Bool;
 	public var hideInTab(get, set):Bool;
 	public var fullscreen(get, set):Bool;
 	public var height(get, set):Int;
@@ -159,7 +158,6 @@ class Window
 	@:noCompletion private var __fullscreen:Bool;
 	@:noCompletion private var __alwaysOnTop:Bool;
 	@:noCompletion private var __darkMode:Bool;
-	@:noCompletion private var __transparent:Bool;
 	@:noCompletion private var __hideInTab:Bool;
 	@:noCompletion private var __vsync:Bool;
 	@:noCompletion private var __height:Int;
@@ -188,7 +186,6 @@ class Window
 				"alwaysOnTop": {get: p.get_alwaysOnTop, set: p.set_alwaysOnTop},
 				"opacity": {get: p.get_opacity, set: p.set_opacity},
 				"darkMode": {get: p.get_darkMode, set: p.set_darkMode},
-				"transparent": {get: p.get_transparent, set: p.set_transparent},
 				"hideInTab": {get: p.get_hideInTab, set: p.set_hideInTab},
 				"vsync": {get: p.get_vsync, set: p.set_vsync},
 				"cursor": {get: p.get_cursor, set: p.set_cursor},
@@ -234,7 +231,6 @@ class Window
 		__hidden = false;
 		__alwaysOnTop = Reflect.hasField(__attributes, "alwaysOnTop") ? __attributes.alwaysOnTop : false;
 		__darkMode = Reflect.hasField(__attributes, "darkMode") ? __attributes.darkMode : false;
-		__transparent = Reflect.hasField(__attributes, "transparent") ? __attributes.transparent : false;
 		__hideInTab = Reflect.hasField(__attributes, "hideInTab") ? __attributes.hideInTab : false;
 
 		if (attributes.context != null)
@@ -587,6 +583,11 @@ class Window
         move(centerWindowX, centerWindowY);
     }
 
+	public function setTransparent(transparent:Bool, clickThrough:Bool = false) {
+		stage.color = transparent ? null : 0x000000;
+		__backend.setTransparent(transparent, clickThrough);
+	}
+
 	// Get & Set Methods
 
 	private function set_alwaysOnTop(value:Bool):Bool {
@@ -611,15 +612,6 @@ class Window
 
 	private function get_darkMode():Bool {
 		return __darkMode;
-	}
-
-	private function set_transparent(transparent:Bool):Bool {
-		stage.color = transparent ? null : 0x000000;
-		return __transparent = __backend.setTransparent(transparent, true);
-	}
-
-	@:noCompletion private function get_transparent():Bool {
-		return __transparent;
 	}
 
 	@:noCompletion private function set_hideInTab(value:Bool):Bool {

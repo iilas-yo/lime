@@ -10,7 +10,6 @@ typedef WindowAttributes =
 	@:optional public var darkMode:Bool;
 	@:optional public var hideInTab:Bool;
 	@:optional public var removeButtons:Bool;
-	@:optional public var transparent:Bool;
 	@:optional public var hardware:Bool;
 	@:optional public var opacity:Float;
 	@:optional public var context:RenderContextAttributes;

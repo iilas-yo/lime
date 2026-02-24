@@ -184,7 +184,6 @@ class NativeWindow
 		setTextInputEnabled(false);
 
 		setDarkMode(Reflect.hasField(attributes, "darkMode") ? attributes.darkMode : false);
-		setTransparent(Reflect.hasField(attributes, "transparent") ? attributes.transparent : false, false);
 		setHideInTab(Reflect.hasField(attributes, "hideInTab") ? attributes.hideInTab : false);
 		setOpacity(Reflect.hasField(attributes, "opacity") ? attributes.opacity : 1.0);
 
