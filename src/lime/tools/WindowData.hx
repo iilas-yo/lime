@@ -52,7 +52,7 @@ abstract WindowData({
 		resizable: false,
 		borderless: false,
 		hideInTab: false,
-		removeButtons: true,
+		removeButtons: false,
 		vsync: false,
 		fullscreen: false,
 		allowHighDPI: false,

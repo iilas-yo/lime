@@ -1071,8 +1071,8 @@ namespace lime {
 	}
 
 	bool SDLWindow::SetDarkMode (bool darkMode) {
-		SDL_SetWindowBordered (sdlWindow, SDL_FALSE);
-		SDL_SetWindowBordered (sdlWindow, SDL_TRUE);
+		/*SDL_SetWindowBordered (sdlWindow, SDL_FALSE);
+		SDL_SetWindowBordered (sdlWindow, SDL_TRUE);*/
 
 		SDL_SysWMinfo wminfo;
 		SDL_VERSION (&wminfo.version);
