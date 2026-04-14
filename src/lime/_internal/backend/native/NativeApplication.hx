@@ -69,7 +69,7 @@ class NativeApplication
 	private var pauseTimer:Int;
 	private var parent:Application;
 	private var toggleFullscreen:Bool;
-	private var acceptFullscreen:Bool = false;
+	private var acceptFullscreen:Bool = true;
 
 	private static function __init__()
 	{
